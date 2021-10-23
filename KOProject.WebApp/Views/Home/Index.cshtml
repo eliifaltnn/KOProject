@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "_Layout";
+    ViewBag.Title = "Bakanlık Muayene Raporu";
+    string controllerName = (string)ViewContext.RouteData.Values["Controller"];
+    int count = 1;
+}
+
+
+
+<style>
+    #labGrid .row .cell label {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<div class="row m-5 w-100 flex-justify-center flex-content-start bg-white shadow-3 p-5" style="overflow-y: auto; height: calc(100vh - 92px);">
+    <div id="labGrid" class="grid w-100">
+        <div class="row">
+            <select id="selBaslik" data-role="select" data-filter="false" data-prepend="Yazı Başlığı">
+                @foreach (var item in ViewBag.Baslik)
+                {
+                    <option value="@count">@item</option>
+                    count++;
+                }
+            </select>
+        </div>
+    </div>
+    <div data-role="panel" class="w-100">
+
+    </div>
+</div>
+
+
+

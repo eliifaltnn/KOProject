@@ -1,0 +1,135 @@
+﻿@model LoginModel
+@{
+    Layout = null;
+    string errorData = ViewBag.LoginError;
+    bool hasError = !string.IsNullOrWhiteSpace(errorData);
+}
+
+<!DOCTYPE html>
+
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href="~/lib/metro4-dist/css/metro-all.css" rel="stylesheet" />
+    <link href="~/css/login.css" rel="stylesheet" asp-append-version="true" />
+    <title>LTS - Giriş</title>
+</head>
+
+<body class="h-vh-100 bg-darkSteel">
+
+    <div class="back">
+
+        <canvas class="particalContainer h-vh-100"></canvas>
+
+        <div id="loginPanel" class="panel shadow-5 border-radius-10">
+            <form id="loginForm" class="login-form p-6"
+                  action="" data-role="validator"
+                  data-on-error-form="OnFormValidateError"
+                  data-on-validate-form="OnFormValidateSuccess">
+                <div class="text-center mb-15">
+                    <img class="appLogo" src="~/img/EnerjisaLogo.png" />
+                    <h6 class="text-light">Laboratuvar Takip Sistemi</h6>
+                </div>
+                <hr class="thin mt-4 mb-4 bg-white">
+                <div class="form-group">
+                    <input name="Username" id="formInputUsername" class="loginInput" type="text" data-role="input"
+                           data-prepend="<span class='mif-user'>" placeholder="Kullanıcı Adınızı giriniz..."
+                           data-validate="required" autofocus>
+                </div>
+                <div class="form-group">
+                    <input name="Password" class="loginInput" type="password" data-role="input"
+                           data-prepend="<span class='mif-key'>" placeholder="Şifrenizi giriniz..."
+                           data-validate="required minlength=6">
+                </div>
+
+                <div class="form-group mt-10">
+                    <button id="btnLogin" class="button primary w-100" type="button">Giriş</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { id = "frmPost", @class = "d-none" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Username, new { id = "inpUsername" })
+        @Html.HiddenFor(m => m.Password, new { id = "inpPassword" })
+    }
+
+    <script src="~/lib/metro4-dist/js/metro.min.js"></script>
+    <script src="~/lib/particles.min.js"></script>
+
+    <script defer>
+		document.getElementById("btnLogin").addEventListener("click", onLoginClick);
+
+		function onLoginClick() {
+			$('#loginForm').submit();
+		}
+
+		function OnFormValidateError() {
+			var form = $(this);
+			form.addClass("ani-ring");
+			setTimeout(function () {
+				form.removeClass("ani-ring");
+			}, 1000);
+		}
+
+		function OnFormValidateSuccess(form) {
+
+			document.getElementById("inpUsername").value = $("#loginForm [name=Username]")[0].value;
+			document.getElementById("inpPassword").value = $("#loginForm [name=Password]")[0].value;
+			document.getElementById("frmPost").submit();
+		}
+
+		function onLoginKeyUp(event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				onLoginClick();
+			}
+		}
+
+		$(".loginInput").on("keyup", onLoginKeyUp);
+
+		function placeCursorAtEnd() {
+			if (this.setSelectionRange) {
+				var len = this.value.length * 2;
+				this.setSelectionRange(len, len);
+			} else {
+				this.value = this.value;
+			}
+		};
+
+		window.onload = function () {
+			Particles.init(
+				{
+					selector: '.particalContainer',
+					connectParticles: false,
+					color: ["#FFFFFF"],
+					maxParticles: 150,
+					sizeVariations: 4
+				});
+
+			var obj = document.getElementById("formInputUsername");
+
+			if (obj.addEventListener) {
+				obj.addEventListener("focus", placeCursorAtEnd, false);
+			} else if (obj.attachEvent) {
+				obj.attachEvent('onfocus', placeCursorAtEnd);
+			}
+
+			obj.focus();
+		}
+
+    </script>
+
+    @if (hasError)
+    {
+        <script>
+		Metro.infobox.create("<p>@errorData</p>", "alert");
+        </script>
+    }
+
+</body>
+</html>
