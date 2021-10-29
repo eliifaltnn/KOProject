@@ -31,17 +31,17 @@ namespace KOProject.WebApp.Controllers
         {
             //var request = (HttpWebRequest)WebRequest.Create("https://www.wired.com/");
             //var aa = await request.GetResponseAsync();
-            //var url = "https://www.wired.com/";//Paste ur url here  
+            var url = "https://www.wired.com/";//Paste ur url here  
 
-            //WebRequest request = HttpWebRequest.Create(url);
+            WebRequest request = HttpWebRequest.Create(url);
 
-            //WebResponse response = request.GetResponse();
+            WebResponse response = request.GetResponse();
 
-            //StreamReader reader = new StreamReader(response.GetResponseStream());
+            StreamReader reader = new StreamReader(response.GetResponseStream());
 
-            //string responseText = reader.ReadToEnd();
+            string responseText = reader.ReadToEnd();
 
-            //string output = JsonConvert.SerializeObject(responseText);
+            string output = JsonConvert.SerializeObject(responseText);
 
 
 
@@ -88,6 +88,12 @@ namespace KOProject.WebApp.Controllers
             ViewBag.Baslik = aa;
 
             return View();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetTitle()
+        {
+            return View("");
         }
 
         public IActionResult Privacy()

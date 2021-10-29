@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "_Layout";
+    ViewBag.Title = "Soru Oluştur";
+    string controllerName = (string)ViewContext.RouteData.Values["Controller"];
+}
+
+<style>
+    #labGrid .row .cell label {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<div id="homeMain" class="w-100">
+    <div class="row">
+        <h2 id="header">Sınav Oluşturulacak Konuyu Şeçiniz</h2>
+        <select id="selBaslik" onchange="getQuestion()" data-role="select" data-prepend="Konu" data-filter-placeholder="Arama...">
+            @if (ViewBag.RSSFeed != null)
+            {
+                @foreach (var item in ViewBag.RSSFeed)
+                {
+                    <option id="optBaslik" value="@item.Title">@item.Title</option>
+                }
+            }
+        </select>
+    </div>
+    @*<div data-role="panel" class="w-100">
+
+        </div>*@
+</div>
+
+<script>
+    function getQuestion() {
+        var x = document.getElementById("selBaslik").value;
+        $(this).addClass("active");
+
+        $("selBaslik").html($(this));
+        $.ajax({
+            type: "post",
+            url: '@Url.Action("GetExamCreateView", "Exam")',
+            data: { title: x },
+            datatype: "json",
+            success: function (data) {
+                if (data != null) {
+                   var temp = $("#exam-panel").html();
+                   var newDiv = temp + data;
+                   $("#exam-panel").html(newDiv);
+                }
+            },
+            error: function () {
+                alert("İşlem Sırasında Hata Oluştu");
+            }
+
+        });
+    }
+</script>

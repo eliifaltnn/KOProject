@@ -12,6 +12,6 @@ namespace KOProject.WebApp.Helpers
 
         public const string AuthenticationType = "Password";
         public const string AuthenticationName = "CookieAuthentication";
-        public const string CookieName = "LtsWebAppCookie";
+        public const string CookieName = "KoWebAppCookie";
     }
 }
